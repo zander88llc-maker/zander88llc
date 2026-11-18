@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Review your Zander88LLC cart, delivery information and payment method.">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="robots" content="noindex">
+  <title>Checkout | Zander88LLC</title>
+  <link rel="canonical" href="https://www.zander88llc.net/checkout">
+  <link rel="icon" href="assets/zander88llc-logo-clear.webp" type="image/webp">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Zander88LLC">
+  <meta property="og:title" content="Checkout | Zander88LLC">
+  <meta property="og:url" content="https://www.zander88llc.net/checkout">
+  <meta property="og:image" content="https://www.zander88llc.net/og.jpg?v=3">
+  <style>
+    /* =========================================================
+       Zander88LLC checkout
+       Section title above each white card; form left, order summary right.
+       Colours and fonts from the storefront (olive, purple, Georgia + system sans).
+       ========================================================= */
+    :root{
+      --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+      --serif:Georgia,"Times New Roman",serif;
+      --ink:#1f2419;
+      --ink-2:#4a4f42;
+      --muted:#7d7f75;
+      --faint:#a5a79c;
+      --page:#f5f3ee;
+      --card:#ffffff;
+      --field:#faf9f6;
+      --line:#ebe7df;
+      --olive:#3f5628;
+      --olive-dark:#2f421d;
+      --olive-soft:#eef2e6;
+      --purple:#6d2bd0;
+      --error:#b42318;
+      --ok:#2f6b1f;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0}
+    body{font-family:var(--sans);color:var(--ink);background:var(--page);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:clip}
+    button,input,select,textarea{font:inherit;color:inherit}
+    button{cursor:pointer}
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+    [hidden]{display:none!important}
+    .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+    :focus-visible{outline:2px solid var(--purple);outline-offset:2px}
+    .wrap{width:min(1180px,calc(100% - 40px));margin:0 auto}
+
+    /* ---------- Header ---------- */
+    .header{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:30}
+    .header-in{display:flex;justify-content:space-between;align-items:center;height:84px}
+    .logo img{height:58px;width:auto}
+    .nav{display:flex;justify-content:center;align-items:center;gap:22px;font-size:15px;font-weight:500}
+    .nav a{color:var(--ink-2);padding:6px 2px}
+    .nav a:hover{color:var(--olive)}
+    .nav .dot{width:4px;height:4px;border-radius:50%;background:var(--ink-2)}
+    .h-actions{display:flex;justify-content:flex-end;align-items:center;gap:6px;height:100%}
+    .icon-btn{position:relative;display:grid;place-items:center;width:46px;height:46px;border:0;background:none;color:var(--ink);border-radius:10px}
+    .icon-btn:hover{background:var(--page)}
+    .cart-btn{height:100%;border-radius:0;border-bottom:2px solid var(--ink)}
+    .cart-btn:hover{background:none}
+    .cart-count{position:absolute;top:22px;right:4px;min-width:18px;height:18px;padding:0 5px;border-radius:999px;background:var(--purple);color:#fff;font-size:11px;font-weight:700;display:grid;place-items:center}
+    .menu-btn{display:none}
+    .mobile-nav{display:none}
+
+    /* ---------- Page ---------- */
+    main{padding:52px 0 72px}
+    .layout{display:grid;grid-template-columns:minmax(0,1fr) 440px;gap:44px;align-items:start}
+    .col{display:grid;gap:30px;min-width:0}
+    .block{display:grid;grid-template-columns:minmax(0,1fr);gap:14px}
+    .block-h{display:flex;align-items:center;gap:16px;min-height:30px}
+    .block-h h2{margin:0;font-size:17px;font-weight:600}
+    .block-h .aside{margin-left:auto;font-size:13px;color:var(--muted)}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:4px;padding:30px 32px}
+
+    /* ---------- Fields: label above, flat input ---------- */
+    .grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:20px 16px}
+    .s6{grid-column:span 6}.s3{grid-column:span 3}.s2{grid-column:span 2}
+    .fld{display:grid;gap:8px;min-width:0;align-content:start}
+    .fld label{font-size:13.5px;font-weight:500;color:var(--ink-2)}
+    .fld label small{font-weight:400;color:var(--muted)}
+    .fld input,.fld select,.fld textarea{width:100%;height:50px;padding:0 16px;border:1px solid var(--line);border-radius:3px;background:var(--field);font-size:15px;outline:0;transition:border-color .15s,background .15s,box-shadow .15s}
+    .fld textarea{height:auto;min-height:92px;padding:13px 16px;resize:vertical;line-height:1.5}
+    .fld input::placeholder,.fld textarea::placeholder{color:var(--faint)}
+    .fld select{appearance:none;-webkit-appearance:none;padding-right:40px;cursor:pointer;background:var(--field) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234a4f42' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='m7 10 5 5 5-5'/%3E%3C/svg%3E") no-repeat right 14px center/18px}
+    .fld input:hover,.fld select:hover,.fld textarea:hover{border-color:#d8d2c6}
+    .fld input:focus,.fld select:focus,.fld textarea:focus{background:#fff;border-color:var(--ink-2);box-shadow:0 0 0 1px var(--ink-2)}
+    .fld .err{display:none;margin:0;color:var(--error);font-size:12.5px}
+    .fld.invalid input,.fld.invalid select{border-color:var(--error);box-shadow:0 0 0 1px var(--error);background:#fff}
+    .fld.invalid .err{display:block}
+
+    /* ---------- Toggle switch ---------- */
+    .switch{position:relative;flex:none;width:52px;height:30px}
+    .switch input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer;z-index:1}
+    .switch i{position:absolute;inset:0;border-radius:999px;background:#d9d6cd;transition:background .2s;pointer-events:none}
+    .switch i::after{content:"";position:absolute;top:4px;left:4px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2);transition:transform .2s cubic-bezier(.2,.7,.2,1)}
+    .switch input:checked+i{background:var(--olive)}
+    .switch input:checked+i::after{transform:translateX(22px)}
+    .switch input:focus-visible+i{outline:2px solid var(--purple);outline-offset:2px}
+
+    /* ---------- Option tiles ---------- */
+    .opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .opts.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .opt{position:relative;display:flex;align-items:center;gap:12px;padding:16px 18px;border:1px solid var(--line);border-radius:3px;background:var(--field);cursor:pointer;transition:border-color .15s,background .15s}
+    .opt:hover{border-color:#d8d2c6}
+    .opt input{position:absolute;opacity:0}
+    .opt .dot{flex:0 0 20px;height:20px;border-radius:50%;border:1.6px solid #b8b5aa;display:grid;place-items:center;background:#fff}
+    .opt .dot::after{content:"";width:10px;height:10px;border-radius:50%;background:var(--olive);transform:scale(0);transition:transform .15s}
+    .opt input:checked~.dot{border-color:var(--olive)}
+    .opt input:checked~.dot::after{transform:scale(1)}
+    .opt input:checked~.top .dot{border-color:var(--olive)}
+    .opt input:checked~.top .dot::after{transform:scale(1)}
+    .opt input:focus-visible~.top .dot{outline:2px solid var(--purple);outline-offset:2px}
+    .opt input:focus-visible~.dot{outline:2px solid var(--purple);outline-offset:2px}
+    .opt:has(input:checked){border-color:var(--olive);background:var(--olive-soft)}
+    .opt .t{flex:1;min-width:0}
+    .opt .t b{display:block;font-weight:500;font-size:14.5px}
+    .opt .t small{display:block;color:var(--muted);font-size:13px}
+    .opt .price{font-weight:600;font-size:14.5px}
+    .pm{flex-direction:column;align-items:flex-start;gap:10px;padding:16px}
+    .pm .top{display:flex;align-items:center;gap:10px;width:100%}
+    .pm .logos{display:flex;gap:4px;flex-wrap:wrap;min-height:26px;align-items:center}
+    .pm .logos img{width:38px;height:24px;padding:2px 3px;border:1px solid var(--line);border-radius:3px;background:#fff;object-fit:contain}
+    .pm .word{font-weight:800;font-size:16px;letter-spacing:-.01em}
+    .pm .pp{font-style:italic;color:#003087}.pm .pp i{color:#009cde}
+
+    .pay-area{margin-top:22px;padding-top:22px;border-top:1px solid var(--line)}
+    .card-preview{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+    .card-preview .wide{grid-column:span 2}
+    .card-preview input:disabled{color:var(--faint);cursor:not-allowed}
+    .notice{display:flex;gap:10px;align-items:flex-start;margin-top:16px;padding:12px 14px;border-radius:3px;background:#fbf5e6;border:1px solid #efe0b8;color:#76510a;font-size:13.5px}
+    .notice svg{flex:0 0 16px;margin-top:2px}
+    .msg{margin:12px 0 0;color:var(--error);font-size:14px}
+    .msg:empty{display:none}
+    .note{margin:0;color:var(--muted);font-size:13.5px}
+    .accept{margin-top:20px;padding-top:18px;border-top:1px solid var(--line)}
+    .accept p{margin:0 0 10px;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+    .accept div{display:flex;flex-wrap:wrap;gap:6px}
+    .accept img{width:46px;height:30px;padding:3px 4px;border:1px solid var(--line);border-radius:3px;background:#fff;object-fit:contain}
+
+    /* ---------- Order summary ---------- */
+    .summary{position:sticky;top:108px}
+    .sum-card{background:var(--card);border:1px solid var(--line);border-radius:4px}
+    .items{padding:10px 26px;max-height:440px;overflow-y:auto}
+    .item{display:grid;grid-template-columns:84px minmax(0,1fr) auto;gap:16px;align-items:center;padding:20px 0}
+    .item + .item{border-top:1px solid #f1eee8}
+    .item-img{width:84px;height:84px;border-radius:3px;background:var(--page);display:grid;place-items:center;overflow:hidden;border:1px solid #f1eee8}
+    .item-img img{width:100%;height:100%;object-fit:contain}
+    .item-name{font-size:14.5px;font-weight:600;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+    .item-sku{margin-top:3px;font-size:12.5px;color:var(--faint);letter-spacing:.02em}
+    .item-price{margin-top:4px;font-size:14.5px;font-weight:600;font-variant-numeric:tabular-nums}
+    .item-side{display:grid;justify-items:end;gap:8px}
+    .stepper{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:3px;background:#fff}
+    .stepper button{width:36px;height:40px;border:0;background:none;color:var(--ink);font-size:18px;line-height:1;display:grid;place-items:center}
+    .stepper button:hover{background:var(--page)}
+    .stepper span{min-width:26px;text-align:center;font-size:14px;font-weight:600;font-variant-numeric:tabular-nums}
+    .remove{border:0;background:none;padding:0;color:var(--muted);font-size:12.5px;text-decoration:underline;text-underline-offset:2px}
+    .remove:hover{color:var(--error)}
+    .empty{padding:36px 0;text-align:center;color:var(--ink-2)}
+    .empty a{display:inline-block;margin-top:10px;color:var(--purple);font-weight:600}
+    .promo{padding:18px 26px;border-top:1px solid var(--line)}
+    .promo-row{display:flex;gap:10px}
+    .promo-row input{flex:1;min-width:0;height:46px;padding:0 14px;border:1px solid var(--line);border-radius:3px;background:var(--field);outline:0;text-transform:uppercase}
+    .promo-row input::placeholder{text-transform:none;color:var(--faint)}
+    .promo-row input:focus{background:#fff;border-color:var(--ink-2);box-shadow:0 0 0 1px var(--ink-2)}
+    .promo-row button{height:46px;padding:0 18px;border:1px solid var(--olive);border-radius:3px;background:#fff;color:var(--olive);font-weight:600}
+    .promo-row button:hover{background:var(--olive-soft)}
+    .promo-msg{margin:8px 0 0;font-size:13px}
+    .promo-msg:empty{display:none}
+    .promo-msg.ok{color:var(--ok)}.promo-msg.bad{color:var(--error)}
+    .totals{background:#fbfaf7;border-top:1px solid var(--line)}
+    .t-rows{display:grid;gap:12px;padding:20px 26px}
+    .row{display:flex;justify-content:space-between;gap:12px;font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums}
+    .row strong{color:var(--ink);font-weight:600}
+    .row.disc strong{color:var(--ok)}
+    .grand{padding:18px 26px;border-top:1px solid var(--line);align-items:baseline}
+    .grand strong{font-family:var(--serif);font-size:24px;font-weight:700}
+    .confirm{padding:0 26px 26px}
+    .btn-confirm{position:relative;width:100%;height:56px;border:0;border-radius:3px;background:var(--olive);color:#fff;font-size:15.5px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:10px;transition:background .15s;overflow:hidden}
+    .btn-confirm::after{content:"";position:absolute;top:0;right:0;border-style:solid;border-width:0 12px 12px 0;border-color:transparent #fbfaf7 transparent transparent}
+    .btn-confirm:hover{background:var(--olive-dark)}
+    .btn-confirm:disabled{background:#a9b39b;cursor:not-allowed}
+    .btn-confirm .spin{width:18px;height:18px;border:2px solid rgba(255,255,255,.45);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .legal{margin:12px 0 0;text-align:center;font-size:12.5px;color:var(--muted)}
+    .legal a{color:var(--ink-2);text-decoration:underline;text-underline-offset:2px}
+    .perks{display:grid;gap:10px;margin-top:4px;padding:0 4px;font-size:13px;color:var(--ink-2)}
+    .perks div{display:flex;gap:10px;align-items:flex-start}
+    .perks svg{flex:0 0 16px;margin-top:2px;color:var(--olive)}
+    .perks a{color:var(--purple)}
+
+    /* ---------- Footer ---------- */
+    .foot{background:#e4e6dc;color:var(--ink-2)}
+    .foot-in{display:flex;align-items:center;justify-content:space-between;gap:12px 24px;flex-wrap:wrap;padding:20px 0;font-size:13px}
+    .foot-brand{display:flex;align-items:center;gap:12px}
+    .foot-brand img{height:36px;width:auto}
+    .foot nav{display:flex;flex-wrap:wrap;gap:6px 20px}
+    .foot nav a:hover{color:var(--olive);text-decoration:underline}
+
+    .toast{position:fixed;left:50%;bottom:22px;z-index:60;transform:translate(-50%,16px);opacity:0;pointer-events:none;padding:11px 18px;border-radius:4px;background:var(--olive-dark);color:#fff;font-size:14px;box-shadow:0 10px 30px rgba(0,0,0,.15);transition:opacity .2s,transform .2s;max-width:calc(100% - 32px)}
+    .toast.show{opacity:1;transform:translate(-50%,0)}
+
+    /* ---------- Responsive ---------- */
+    @media (max-width:1060px){
+      .layout{grid-template-columns:minmax(0,1fr) 390px;gap:28px}
+      .card{padding:24px}
+      .items,.promo,.t-rows,.grand{padding-left:20px;padding-right:20px}
+      .confirm{padding:0 20px 20px}
+      .opts.three{grid-template-columns:1fr}
+    }
+    @media (max-width:900px){
+      .header-in{grid-template-columns:1fr auto;height:72px}
+      .nav{display:none}
+      .menu-btn{display:grid}
+      .logo img{height:50px}
+      .mobile-nav.open{display:grid;border-top:1px solid var(--line);padding:6px 0}
+      .mobile-nav a{padding:12px 20px;font-weight:500}
+      .layout{grid-template-columns:minmax(0,1fr)}
+      .summary{position:static}
+      main{padding:28px 0 52px}
+      .opts.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+    }
+    @media (max-width:600px){
+      .wrap{width:calc(100% - 24px)}
+      .card{padding:20px 16px}
+      .s3,.s2{grid-column:span 6}
+      .s2.half{grid-column:span 3}
+      .opts,.opts.three{grid-template-columns:1fr}
+      .item{grid-template-columns:72px minmax(0,1fr);gap:12px}
+      .item-img{width:72px;height:72px}
+      .item-side{grid-column:2;justify-items:start;grid-auto-flow:column;align-items:center;gap:14px}
+      .foot-in{justify-content:center;text-align:center}
+      .foot-brand{flex-direction:column;gap:6px}
+      .foot nav{justify-content:center}
+    }
+    /* ---------- Phone: summary bar on top, pay bar pinned to the bottom ---------- */
+    .mbar,.paybar,.m-legal{display:none}
+    @media (max-width:900px){
+      .summary{order:-1}
+      .summary .block-h,.summary .confirm{display:none}
+      .summary:not(.open){display:none}
+      .summary.open .sum-card{display:block}
+      .m-legal{display:block;margin-top:18px}
+      .mbar .chev{transition:transform .2s}
+      .mbar[aria-expanded="true"] .chev{transform:rotate(180deg)}
+      .mbar{display:flex;cursor:pointer;align-items:center;justify-content:space-between;gap:12px;width:100%;padding:14px max(16px,env(safe-area-inset-left,0px));border:0;border-bottom:1px solid var(--line);background:#fff;font-size:14.5px;color:var(--purple);text-decoration:none}
+      .mbar span{display:flex;align-items:center;gap:8px}
+      .mbar strong{color:var(--ink);font-size:17px}
+      .paybar{position:fixed;left:0;right:0;bottom:0;z-index:40;display:flex;align-items:center;gap:14px;padding:12px max(16px,env(safe-area-inset-right,0px)) calc(12px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));background:rgba(255,255,255,.97);border-top:1px solid var(--line);box-shadow:0 -8px 24px rgba(30,30,20,.08);transition:transform .2s}
+      .paybar.away{transform:translateY(110%)}
+      .paybar .pb-total{display:grid;line-height:1.2}
+      .paybar .pb-total small{color:var(--muted);font-size:12px}
+      .paybar .pb-total b{font-size:18px}
+      .paybar button{flex:1;height:50px;border:0;border-radius:4px;background:var(--olive);color:#fff;font-size:16px;font-weight:600}
+      .paybar button:disabled{opacity:.5}
+      body{padding-bottom:84px}
+    }
+    @media (max-width:600px){
+      .fld input,.fld select,.fld textarea,.promo input{font-size:16px}
+      .header-in{height:64px}
+      .logo img{height:44px}
+      main{padding:16px 0 32px}
+      .block + .block{margin-top:22px}
+      .col{gap:20px}
+      .block{gap:10px}
+      .layout{gap:16px}
+      .opt{padding:14px}
+      .opt.pm{flex-direction:row;align-items:center}
+      .opt.pm .logos{display:none}
+      .grid{gap:16px 12px}
+    }
+    @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+    /* keep the summary inside narrow screens */
+    .layout > *{min-width:0}
+    .item > div{min-width:0}
+  </style>
+  <script src="assets/catalog-data.js?v=14"></script>
+  <script src="assets/products-data.js?v=9"></script>
+</head>
+<body>
+
+<header class="header">
+  <div class="wrap header-in">
+    <a class="logo" href="/" aria-label="Zander88LLC home"><img src="assets/zander88llc-logo-clear.webp" alt="Zander88LLC" width="78" height="58"></a>
+    <div class="h-actions">
+      <a class="icon-btn cart-btn" href="#summary" aria-label="Cart">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1 12H6L5 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/><path d="M9.5 12.5a2.5 2.5 0 0 0 5 0"/></svg>
+        <span class="cart-count js-count">0</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<button type="button" class="mbar" id="mbar" aria-expanded="false" aria-controls="summary">
+  <span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 8h14l-1 12H6L5 8Z"/><path d="M9 8V7a3 3 0 0 1 6 0v1"/></svg><span id="mbarLabel">Show order summary</span><svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></span>
+  <strong class="js-total">$0.00</strong>
+</button>
+<main>
+  <div class="wrap layout">
+    <!-- ================= Left: form ================= -->
+    <form class="col" id="checkoutForm" novalidate>
+
+      <section class="block" aria-labelledby="deliveryTitle">
+        <div class="block-h"><h2 id="deliveryTitle">Delivery Information</h2><span class="aside">U.S. addresses only</span></div>
+        <div class="card">
+          <div class="grid">
+            <div class="fld s3">
+              <label for="fullName">Name</label>
+              <input id="fullName" name="fullName" placeholder="First and last name" autocomplete="name" required>
+              <p class="err">Enter your full name.</p>
+            </div>
+            <div class="fld s3">
+              <label for="email">Email</label>
+              <input id="email" name="email" type="email" placeholder="you@example.com" autocomplete="email" required>
+              <p class="err">Enter a valid email address.</p>
+            </div>
+            <div class="fld s6">
+              <label for="address">Address</label>
+              <input id="address" name="address" placeholder="Street address" autocomplete="address-line1" required>
+              <p class="err">Enter your street address.</p>
+            </div>
+            <div class="fld s6">
+              <label for="address2">Apartment, suite, unit <small>(optional)</small></label>
+              <input id="address2" name="address2" placeholder="Apt 4B" autocomplete="address-line2">
+            </div>
+            <div class="fld s2">
+              <label for="city">City</label>
+              <input id="city" name="city" placeholder="City" autocomplete="address-level2" required>
+              <p class="err">Enter your city.</p>
+            </div>
+            <div class="fld s2 half">
+              <label for="state">State</label>
+              <select id="state" name="state" autocomplete="address-level1" required>
+                <option value="">Select state</option>
+                <option value="AZ">Arizona</option>
+                <option value="CA">California</option>
+                <option value="FL">Florida</option>
+                <option value="GA">Georgia</option>
+                <option value="IL">Illinois</option>
+                <option value="NM">New Mexico</option>
+                <option value="NY">New York</option>
+                <option value="TX">Texas</option>
+                <option value="WA">Washington</option>
+              </select>
+              <p class="err">Select a state.</p>
+            </div>
+            <div class="fld s2 half">
+              <label for="zip">ZIP</label>
+              <input id="zip" name="zip" placeholder="90250" autocomplete="postal-code" inputmode="numeric" maxlength="10" required>
+              <p class="err">Enter a 5-digit ZIP.</p>
+            </div>
+            <div class="fld s3">
+              <label for="country">Country</label>
+              <select id="country" name="country" autocomplete="country-name"><option>United States</option></select>
+            </div>
+            <div class="fld s3">
+              <label for="phone">Mobile Number <small>(optional)</small></label>
+              <input id="phone" name="phone" type="tel" placeholder="(555) 123-4567" autocomplete="tel" inputmode="tel">
+              <p class="err">Enter a 10-digit number.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="block" aria-labelledby="shippingTitle">
+        <div class="block-h"><h2 id="shippingTitle">Delivery Speed</h2></div>
+        <div class="card">
+          <div class="opts" role="radiogroup" aria-labelledby="shippingTitle">
+            <label class="opt"><input type="radio" name="shipping" value="6.95" checked><span class="dot"></span><span class="t"><b>Standard</b><small>4–7 business days</small></span><span class="price">$6.95</span></label>
+            <label class="opt"><input type="radio" name="shipping" value="14.95"><span class="dot"></span><span class="t"><b>Priority</b><small>2–3 business days</small></span><span class="price">$14.95</span></label>
+          </div>
+        </div>
+      </section>
+
+      <section class="block" aria-labelledby="noteTitle">
+        <div class="block-h">
+          <h2 id="noteTitle">Add a Delivery Note</h2>
+          <span class="switch"><input type="checkbox" id="noteToggle" aria-label="Add a delivery note"><i></i></span>
+        </div>
+        <div class="card" id="noteCard" hidden>
+          <div class="fld">
+            <label for="note">Note</label>
+            <textarea id="note" name="note" maxlength="300" placeholder="Gate code, where to leave the parcel, gift message…"></textarea>
+          </div>
+        </div>
+      </section>
+
+      <section class="block" aria-labelledby="paymentTitle">
+        <div class="block-h"><h2 id="paymentTitle">Payment Method</h2><span class="aside">Secure &amp; encrypted</span></div>
+        <div class="card">
+          <div class="opts three" role="radiogroup" aria-labelledby="paymentTitle">
+            <label class="opt pm">
+              <input type="radio" name="paymentMethod" value="card" checked>
+              <span class="top"><span class="dot"></span><span class="t"><b>Credit / Debit Card</b></span></span>
+              <span class="logos" aria-hidden="true"><img src="assets/payments/visa.svg" alt=""><img src="assets/payments/mastercard.svg" alt=""><img src="assets/payments/american-express.svg" alt=""><img src="assets/payments/discover.svg" alt=""></span>
+            </label>
+            <label class="opt pm">
+              <input type="radio" name="paymentMethod" value="wallet">
+              <span class="top"><span class="dot"></span><span class="t"><b>Apple Pay / Google Pay</b></span></span>
+              <span class="logos"><small style="color:var(--muted);font-size:12.5px">On supported phones and browsers</small></span>
+            </label>
+            <label class="opt pm">
+              <input type="radio" name="paymentMethod" value="paypal">
+              <span class="top"><span class="dot"></span><span class="t"><b>PayPal</b></span></span>
+              <span class="logos" aria-hidden="true"><span class="word pp">Pay<i>Pal</i></span></span>
+            </label>
+          </div>
+
+          <div class="pay-area" id="cardPanel">
+            <p class="note" id="stripeHint">After you confirm, you will finish payment on Stripe’s secure page with card, Apple Pay, or Google Pay.</p>
+            <p class="note" id="walletNote" hidden>Apple Pay and Google Pay open on Stripe’s secure checkout page.</p>
+            <p class="msg" id="payment-message" role="alert"></p>
+          </div>
+
+          <div class="pay-area" id="paypalPanel" hidden>
+            <p class="note" id="paypalHint">Fill in your delivery information, then use the PayPal button below to log in and pay.</p>
+            <div id="paypal-button-container" hidden></div>
+            <p class="msg" id="paypal-message" role="alert"></p>
+          </div>
+
+        </div>
+      </section>
+
+      <section class="block" aria-labelledby="billingTitle">
+        <div class="block-h">
+          <h2 id="billingTitle">Different Billing Address</h2>
+          <span class="switch"><input type="checkbox" id="billingToggle" aria-label="Use a different billing address"><i></i></span>
+        </div>
+        <p class="note" id="billingSame">Billing address is the same as your delivery address.</p>
+        <div class="card" id="billingCard" hidden>
+          <div class="grid">
+            <div class="fld s6"><label for="bName">Name on card</label><input id="bName" placeholder="First and last name" autocomplete="billing name" data-billing><p class="err">Enter the cardholder's name.</p></div>
+            <div class="fld s6"><label for="bAddress">Billing address</label><input id="bAddress" placeholder="Street address" autocomplete="billing address-line1" data-billing><p class="err">Enter the billing address.</p></div>
+            <div class="fld s2"><label for="bCity">City</label><input id="bCity" placeholder="City" autocomplete="billing address-level2" data-billing><p class="err">Enter a city.</p></div>
+            <div class="fld s2 half"><label for="bState">State</label><input id="bState" placeholder="TX" maxlength="2" autocomplete="billing address-level1" data-billing><p class="err">2-letter code.</p></div>
+            <div class="fld s2 half"><label for="bZip">ZIP</label><input id="bZip" placeholder="73301" inputmode="numeric" maxlength="10" autocomplete="billing postal-code" data-billing><p class="err">Enter a 5-digit ZIP.</p></div>
+          </div>
+        </div>
+      </section>
+            <p class="legal m-legal">By confirming you agree to our <a href="/terms">Terms</a>, <a href="/privacy">Privacy Policy</a> and <a href="/returns">Refund Policy</a>.</p>
+      </form>
+
+    <!-- ================= Right: order summary ================= -->
+    <aside class="summary" id="summary" aria-labelledby="summaryTitle">
+      <div class="block">
+        <div class="block-h"><h2 id="summaryTitle">Order Summary</h2><span class="aside"><span class="js-count">0</span> items</span></div>
+        <div class="sum-card">
+          <div class="items" id="summaryItems" aria-live="polite"></div>
+
+          <div class="promo" id="couponPanel">
+            <div class="promo-row">
+              <label class="sr-only" for="couponCode">Discount code</label>
+              <input id="couponCode" placeholder="Discount code" autocomplete="off">
+              <button id="applyCoupon" type="button">Apply</button>
+            </div>
+            <p class="promo-msg" id="couponMessage" aria-live="polite"></p>
+          </div>
+
+          <div class="totals">
+            <div class="t-rows">
+              <div class="row"><span>Subtotal</span><strong id="summarySubtotal">$0.00</strong></div>
+              <div class="row disc" id="discountRow" hidden><span>Discount <span id="discountCode"></span></span><strong id="summaryDiscount">−$0.00</strong></div>
+              <div class="row"><span>Shipping</span><strong id="summaryShipping">$6.95</strong></div>
+              <div class="row"><span>Taxes</span><strong style="font-weight:400;color:var(--muted)">Calculated at payment</strong></div>
+            </div>
+            <div class="row grand"><span>Total (USD)</span><strong class="js-total">$0.00</strong></div>
+            <div class="confirm">
+              <button class="btn-confirm" id="placeOrder" type="submit" form="checkoutForm"><span id="placeLabel">Confirm Order</span></button>
+              <p class="legal">By confirming you agree to our <a href="/terms">Terms</a>, <a href="/privacy">Privacy Policy</a> and <a href="/returns">Refund Policy</a>.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+</main>
+<div class="paybar" id="paybar">
+  <div class="pb-total"><small>Total (USD)</small><b class="js-total">$0.00</b></div>
+  <button type="submit" form="checkoutForm" id="placeOrderM">Confirm Order</button>
+</div>
+
+<footer class="foot">
+  <div class="wrap foot-in">
+    <div class="foot-brand">
+      <img src="assets/zander88llc-logo-clear.webp" alt="Zander88LLC" width="48" height="36">
+      <span>© <span id="year">2026</span> Zander88LLC. All rights reserved.</span>
+    </div>
+    <nav aria-label="Store policies">
+      <a href="/shipping">Shipping</a>
+      <a href="/returns">Returns &amp; Refunds</a>
+      <a href="/privacy">Privacy</a>
+      <a href="/terms">Terms</a>
+      <a href="mailto:curtis@zander88llc.net">Contact</a>
+    </nav>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  'use strict';
+  var CART_KEY = 'zander88Cart';
+  var MAX_QTY = 20;
+  var COUPONS = { SAVE10: 10, Z88WELCOME: 10 };   // must match api/_lib/order.js
+  var cart = [];
+  try { cart = JSON.parse(localStorage.getItem(CART_KEY) || '[]'); if (!Array.isArray(cart)) cart = []; } catch (e) { cart = []; }
+
+  /* Product photos stored on this site (from products-data.js) win over the catalog thumbnails */
+  function localPhoto(id) {
+    try {
+      var map = window.ZanderProductExtras || {};
+      var x = map[id] || map[String(id)] || map[Number(id)];
+      return x && x.image ? x.image : '';
+    } catch (e) { return ''; }
+  }
+
+  function mediaUrl(v) {
+    var s = String(v || '').trim();
+    if (!s) return 'assets/images/product-placeholder.svg';
+    if (/^\/\//.test(s)) s = 'https:' + s;
+    if (/^https?:\/\/(wsrv\.nl|images\.weserv\.nl)\//i.test(s)) return s;
+    // Wix CDN often fails DNS (ERR_NAME_NOT_RESOLVED) — load via image proxy instead.
+    if (/static\.wixstatic\.com/i.test(s)) {
+      s = s.replace(/,enc_avif/gi, '').replace(/w_\d+,h_\d+/g, 'w_400,h_400');
+      if (!/[\s<>'"\\]/.test(s) && s.indexOf('..') === -1) {
+        return 'https://wsrv.nl/?url=' + encodeURIComponent(s) + '&w=400&h=400&fit=contain';
+      }
+    }
+    if (/^(https?:\/\/|assets\/|\/assets\/|blob:)/i.test(s) && !/[\s<>'"\\]/.test(s) && s.indexOf('..') === -1) return s;
+    return 'assets/images/product-placeholder.svg';
+  }
+
+  /* Keep the cart in line with the live catalog (prices, names, photos, stock) */
+  (function syncCart() {
+    try {
+      var live = JSON.parse(localStorage.getItem('zander88CatalogLive') || 'null');
+      if (Array.isArray(live) && live.length) window.ZanderCatalog = live;
+    } catch (e) {}
+    var catalog = window.ZanderCatalog;
+    if (!Array.isArray(catalog) || !catalog.length) return;
+    var byId = {};
+    catalog.forEach(function (p) { byId[Number(p.id)] = p; });
+    cart = cart.filter(function (item) {
+      var p = byId[Number(item && item.id)];
+      if (!p || !p.stock || p.price == null) return false;
+      var sizes = Array.isArray(p.sizes) ? p.sizes : [];
+      if (sizes.length) {
+        /* Sized items (clothing/shoes) need a valid, in-stock size */
+        if (!item.size || sizes.indexOf(item.size) === -1) return false;
+        if (Array.isArray(p.soldOutSizes) && p.soldOutSizes.indexOf(item.size) !== -1) return false;
+      } else {
+        delete item.size;
+      }
+      var sizePrice = item.size && p.sizePrices ? p.sizePrices[item.size] : null;
+      item.name = p.name; item.price = sizePrice != null ? Number(sizePrice) : p.price; item.cat = p.cat; item.code = p.itemCode;
+      item.img = localPhoto(p.id) || (p.images && p.images[0] && p.images[0].src) || p.image || item.img;
+      item.qty = Math.min(MAX_QTY, Math.max(1, parseInt(item.qty, 10) || 1));
+      return true;
+    });
+  }());
+
+  function $(id) { return document.getElementById(id); }
+  function money(v) { return '$' + Number(v || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+  function pad(n) { return n < 10 ? '0' + n : String(n); }
+  function esc(v) { return String(v == null ? '' : v).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function safeSrc(v) { return mediaUrl(v); }
+  function val(id) { var n = $(id); return n ? String(n.value || '').trim() : ''; }
+  function nameParts(full) { var p = String(full || '').trim().split(/\s+/); return { first: p.shift() || '', last: p.join(' ') }; }
+  function shippingValue() { var s = document.querySelector('input[name="shipping"]:checked'); return s ? s.value : '6.95'; }
+  function paymentMethod() { var s = document.querySelector('input[name="paymentMethod"]:checked'); return s ? s.value : 'card'; }
+  function billingDifferent() { return $('billingToggle').checked; }
+  function toast(t) { var el = $('toast'); el.textContent = t; el.classList.add('show'); clearTimeout(toast.t); toast.t = setTimeout(function () { el.classList.remove('show'); }, 3000); }
+  function saveCart() { try { localStorage.setItem(CART_KEY, JSON.stringify(cart.map(function (i) { var line = { id: i.id, name: i.name, price: i.price, img: i.img, qty: i.qty }; if (i.size) line.size = i.size; return line; }))); } catch (e) {} }
+
+  var form = $('checkoutForm'), payBtn = $('placeOrder'), payLabel = $('placeLabel');
+  var coupon = '';
+  var submitting = false;
+  var stripeConfigured = false;
+  var paypalConfigured = false, paypalRendered = false;
+
+  /* ---------- Totals (same maths as the server) ---------- */
+  function totals() {
+    var subtotal = cart.reduce(function (s, i) { return s + Number(i.price) * i.qty; }, 0);
+    var discount = coupon && cart.length ? Math.round(subtotal * COUPONS[coupon]) / 100 : 0;
+    var shipping = cart.length ? Number(shippingValue()) : 0;
+    var total = Math.max(0, subtotal - discount + shipping);
+    return { subtotal: subtotal, discount: discount, shipping: shipping, total: total, cents: Math.round(total * 100) };
+  }
+
+  /* ---------- Order summary ---------- */
+  function render() {
+    var box = $('summaryItems');
+    if (!cart.length) {
+      box.innerHTML = '<div class="empty">Your cart is empty.<br><a href="/#products">Continue shopping</a></div>';
+    } else {
+      box.innerHTML = cart.map(function (item, index) {
+        var name = esc(item.name), id = String(index);
+        var size = item.size ? '<div class="item-sku">Size: ' + esc(item.size) + '</div>' : '';
+        var sku = item.code ? esc(item.code) : 'Z88-' + esc(item.id);
+        return '<div class="item">' +
+          '<div class="item-img"><img src="' + esc(safeSrc(item.img)) + '" alt="' + name + '" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src=\'assets/images/product-placeholder.svg\'"></div>' +
+          '<div><div class="item-name">' + name + '</div><div class="item-sku">' + sku + '</div>' + size + '<div class="item-price">' + money(item.price) + '</div></div>' +
+          '<div class="item-side"><span class="stepper"><button type="button" data-action="minus" data-id="' + id + '" aria-label="Decrease quantity of ' + name + '">−</button><span>' + pad(item.qty) + '</span><button type="button" data-action="plus" data-id="' + id + '" aria-label="Increase quantity of ' + name + '">+</button></span>' +
+          '<button class="remove" type="button" data-action="remove" data-id="' + id + '">Remove</button></div></div>';
+      }).join('');
+    }
+    var t = totals();
+    var count = cart.reduce(function (s, i) { return s + i.qty; }, 0);
+    $('couponPanel').hidden = !cart.length;
+    $('summarySubtotal').textContent = money(t.subtotal);
+    $('discountRow').hidden = t.discount <= 0;
+    $('summaryDiscount').textContent = '−' + money(t.discount);
+    $('discountCode').textContent = coupon ? '(' + coupon + ')' : '';
+    $('summaryShipping').textContent = cart.length ? money(t.shipping) : '--';
+    document.querySelectorAll('.js-total').forEach(function (n) { n.textContent = money(t.total); });
+    document.querySelectorAll('.js-count').forEach(function (n) { n.textContent = count; });
+    saveCart();
+    updatePayUi();
+  }
+
+  function updatePayUi() {
+    var m = paymentMethod();
+    var pp = m === 'paypal';
+    $('cardPanel').hidden = pp;
+    $('paypalPanel').hidden = !pp;
+    $('walletNote').hidden = m !== 'wallet';
+    $('stripeHint').hidden = m === 'wallet';
+    if (pp && paypalConfigured) renderPayPal();
+    $('paypal-button-container').hidden = !(pp && paypalConfigured);
+    payBtn.hidden = pp && paypalConfigured;
+    payBtn.disabled = !cart.length || submitting;
+    if (submitting) payLabel.innerHTML = '<span class="spin" aria-hidden="true"></span> Redirecting to Stripe…';
+    else if (pp) payLabel.textContent = 'Continue with PayPal';
+    else payLabel.textContent = 'Pay with Stripe · ' + money(totals().total);
+    var mb = $('placeOrderM');
+    if (mb) {
+      mb.disabled = payBtn.disabled;
+      mb.textContent = submitting ? 'Redirecting…' : (pp ? (paypalConfigured ? 'Pay with PayPal' : 'Continue with PayPal') : 'Pay with Stripe');
+    }
+  }
+
+  /* ---------- Validation ---------- */
+  var rules = {
+    fullName: function (v) { return v.length >= 2; },
+    email: function (v) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v); },
+    phone: function (v) { return !v || v.replace(/\D/g, '').length === 10; },
+    zip: function (v) { return /^\d{5}(-\d{4})?$/.test(v); },
+    bZip: function (v) { return /^\d{5}(-\d{4})?$/.test(v); },
+    bState: function (v) { return /^[A-Za-z]{2}$/.test(v); }
+  };
+  function isRequired(el) { return el.required || (el.hasAttribute('data-billing') && billingDifferent()); }
+  function validate(el) {
+    var wrap = el.closest('.fld');
+    if (!wrap) return true;
+    var v = String(el.value || '').trim();
+    if (!isRequired(el) && !v) { wrap.classList.remove('invalid'); el.removeAttribute('aria-invalid'); return true; }
+    var ok = v !== '' && (!rules[el.id] || rules[el.id](v));
+    wrap.classList.toggle('invalid', !ok);
+    el.setAttribute('aria-invalid', String(!ok));
+    return ok;
+  }
+  function validateAll() {
+    var fields = Array.prototype.slice.call(form.querySelectorAll('.fld input:not(:disabled), .fld select'))
+      .filter(function (el) { return !el.closest('[hidden]'); });
+    var bad = fields.filter(function (el) { return !validate(el); });
+    if (bad.length) {
+      bad[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      bad[0].focus({ preventScroll: true });
+      return false;
+    }
+    return true;
+  }
+  form.querySelectorAll('.fld input, .fld select').forEach(function (el) {
+    el.addEventListener('blur', function () { if (el.value.trim() || el.closest('.fld').classList.contains('invalid')) validate(el); });
+    el.addEventListener('input', function () { if (el.closest('.fld').classList.contains('invalid')) validate(el); });
+    if (el.tagName === 'SELECT') el.addEventListener('change', function () { validate(el); });
+  });
+  $('phone').addEventListener('input', function (e) {
+    var d = e.target.value.replace(/\D/g, '').slice(0, 10);
+    e.target.value = d.length > 6 ? '(' + d.slice(0, 3) + ') ' + d.slice(3, 6) + '-' + d.slice(6) : d.length > 3 ? '(' + d.slice(0, 3) + ') ' + d.slice(3) : d;
+  });
+  ['zip', 'bZip'].forEach(function (id) { $(id).addEventListener('input', function (e) { e.target.value = e.target.value.replace(/[^\d-]/g, ''); }); });
+  $('bState').addEventListener('input', function (e) { e.target.value = e.target.value.replace(/[^A-Za-z]/g, '').toUpperCase(); });
+
+  /* ---------- Order data for the server ---------- */
+  function orderPayload() {
+    var n = nameParts(val('fullName'));
+    return {
+      cart: cart.map(function (i) { return i.size ? { id: i.id, size: i.size, qty: i.qty } : { id: i.id, qty: i.qty }; }),
+      shipping: shippingValue(),
+      coupon: coupon,
+      note: $('noteToggle').checked ? val('note') : '',
+      email: val('email'), firstName: n.first, lastName: n.last,
+      phone: val('phone'),
+      address: val('address') + (val('address2') ? ', ' + val('address2') : ''),
+      city: val('city'), state: val('state'), zip: val('zip')
+    };
+  }
+  /* ---------- Stripe hosted Checkout (card / Apple Pay / Google Pay on Stripe’s page) ---------- */
+  function startStripeCheckout() {
+    var msg = $('payment-message');
+    msg.textContent = '';
+    if (!stripeConfigured) {
+      msg.textContent = 'Card payments are not connected yet. Please choose PayPal, or try again later.';
+      msg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return Promise.resolve();
+    }
+    submitting = true;
+    updatePayUi();
+    return fetch('/api/create-checkout-session', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(orderPayload())
+    })
+      .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, data: d }; }); })
+      .then(function (res) {
+        if (!res.ok || !res.data.url) {
+          var err = new Error(res.data.error || 'Unable to start Stripe Checkout.');
+          err.configured = res.data.configured;
+          throw err;
+        }
+        window.location.href = res.data.url;
+      })
+      .catch(function (err) {
+        submitting = false;
+        updatePayUi();
+        if (err && err.configured === false) {
+          msg.textContent = 'Card payments are not connected yet. Please choose PayPal, or try again later.';
+        } else {
+          msg.textContent = (err && err.message) || 'Unable to start payment.';
+        }
+        msg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+  }
+
+  /* ---------- PayPal ---------- */
+  function setPaypalMessage(m) { $('paypal-message').textContent = m || ''; }
+  function loadPayPalSdk(clientId) {
+    if (!clientId || $('paypal-sdk')) return;
+    var s = document.createElement('script');
+    s.id = 'paypal-sdk';
+    s.src = 'https://www.paypal.com/sdk/js?client-id=' + encodeURIComponent(clientId) + '&currency=USD&intent=capture&commit=true&disable-funding=card,credit,paylater';
+    s.onload = function () { if (paymentMethod() === 'paypal') renderPayPal(); };
+    document.head.appendChild(s);
+  }
+  function renderPayPal() {
+    if (paypalRendered || !window.paypal) return;
+    paypalRendered = true;
+    window.paypal.Buttons({
+      style: { layout: 'vertical', color: 'gold', shape: 'rect', label: 'paypal', height: 50 },
+      onClick: function (data, actions) {
+        if (!cart.length || !validateAll()) return actions.reject();
+        setPaypalMessage('');
+        return actions.resolve();
+      },
+      createOrder: function () {
+        return fetch('/api/paypal-create-order', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(orderPayload()) })
+          .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, data: d }; }); })
+          .then(function (res) { if (!res.ok || !res.data.id) throw new Error(res.data.error || 'PayPal order failed'); return res.data.id; })
+          .catch(function (err) { setPaypalMessage(err.message || 'PayPal order failed'); throw err; });
+      },
+      onApprove: function (data) {
+        return fetch('/api/paypal-capture-order', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ orderID: data.orderID }) })
+          .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, data: d }; }); })
+          .then(function (res) {
+            if (!res.ok || !res.data.success) throw new Error(res.data.error || 'PayPal payment failed');
+            try { localStorage.removeItem(CART_KEY); } catch (e) {}
+            window.location.href = 'order-confirmation.html?paypal=1&token=' + encodeURIComponent(data.orderID);
+          })
+          .catch(function (err) { setPaypalMessage(err.message || 'The PayPal payment could not be completed.'); });
+      },
+      onError: function () { setPaypalMessage('PayPal could not start. Please try again or pay by card.'); },
+      onCancel: function () { setPaypalMessage('PayPal payment was canceled.'); }
+    }).render('#paypal-button-container');
+  }
+
+  /* ---------- Events ---------- */
+  $('summaryItems').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-action]');
+    if (!b) return;
+    var index = Number(b.getAttribute('data-id'));
+    var item = cart[index];
+    if (!item) return;
+    var a = b.getAttribute('data-action');
+    if (a === 'plus') item.qty = Math.min(MAX_QTY, item.qty + 1);
+    if (a === 'minus') item.qty = Math.max(1, item.qty - 1);
+    if (a === 'remove') { cart = cart.filter(function (i, at) { return at !== index; }); toast('Item removed.'); }
+    render();
+  });
+
+  function applyCoupon() {
+    var code = $('couponCode').value.trim().toUpperCase();
+    var m = $('couponMessage');
+    if (COUPONS[code]) { coupon = code; m.className = 'promo-msg ok'; m.textContent = code + ' applied: ' + COUPONS[code] + '% off your items.'; }
+    else { coupon = ''; m.className = 'promo-msg bad'; m.textContent = code ? 'That code is not valid.' : 'Enter a discount code.'; }
+    render();
+  }
+  $('applyCoupon').addEventListener('click', applyCoupon);
+  $('couponCode').addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); applyCoupon(); } });
+
+  document.querySelectorAll('input[name="shipping"]').forEach(function (r) { r.addEventListener('change', render); });
+  document.querySelectorAll('input[name="paymentMethod"]').forEach(function (r) { r.addEventListener('change', updatePayUi); });
+  $('noteToggle').addEventListener('change', function () { $('noteCard').hidden = !this.checked; if (this.checked) $('note').focus(); });
+  $('billingToggle').addEventListener('change', function () {
+    $('billingCard').hidden = !this.checked;
+    $('billingSame').hidden = this.checked;
+    if (!this.checked) document.querySelectorAll('[data-billing]').forEach(function (el) { el.closest('.fld').classList.remove('invalid'); });
+  });
+
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (!cart.length || submitting) return;
+    if (!validateAll()) { toast('Please check the highlighted fields.'); return; }
+    if (paymentMethod() === 'paypal') {
+      setPaypalMessage(paypalConfigured ? 'Use the PayPal button below to pay.' : 'PayPal is not connected yet. Please pay with Stripe.');
+      return;
+    }
+    startStripeCheckout();
+  });
+
+  // Phone pay bar: PayPal's own button lives in the payment box, so point there; hide the bar while the real button is on screen
+  $('placeOrderM').addEventListener('click', function (e) {
+    if (paymentMethod() === 'paypal' && paypalConfigured) { e.preventDefault(); $('paypal-button-container').scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+  });
+  $('mbar').addEventListener('click', function () {
+    var open = !$('summary').classList.contains('open');
+    $('summary').classList.toggle('open', open);
+    this.setAttribute('aria-expanded', String(open));
+    $('mbarLabel').textContent = open ? 'Hide order summary' : 'Show order summary';
+  });
+  $('year').textContent = new Date().getFullYear();
+  render();
+
+  fetch('/api/stripe-config')
+    .then(function (r) { return r.json(); })
+    .then(function (cfg) {
+      stripeConfigured = Boolean(cfg.configured);
+      if (stripeConfigured) {
+        $('stripeHint').textContent = 'After you confirm, you will finish payment on Stripe\'s secure page with card, Apple Pay, or Google Pay.';
+      } else {
+        $('stripeHint').textContent = 'Live card payments start after Stripe keys are added.';
+      }
+      paypalConfigured = Boolean(cfg.paypal && cfg.paypal.configured && cfg.paypal.clientId);
+      if (paypalConfigured) loadPayPalSdk(cfg.paypal.clientId);
+      else $('paypalHint').textContent = 'PayPal will appear here once the store connects its PayPal account.';
+      updatePayUi();
+    })
+    .catch(function () {
+      stripeConfigured = false;
+      paypalConfigured = false;
+      updatePayUi();
+    });
+});
+</script>
+</body>
+</html>

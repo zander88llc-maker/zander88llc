@@ -1,0 +1,252 @@
+/* Render the sourced catalog before the existing storefront binds filters/cart. */
+(function () {
+  'use strict';
+
+  function safeMediaUrl(value) {
+    var src = String(value || '').trim();
+    if (/^\/\//.test(src)) src = 'https:' + src;
+    if (/^https?:\/\/(wsrv\.nl|images\.weserv\.nl)\//i.test(src)) return src;
+    if (/static\.wixstatic\.com/i.test(src)) {
+      src = src.replace(/,enc_avif/gi, '').replace(/w_\d+,h_\d+/g, 'w_400,h_400');
+      if (/^https?:\/\//i.test(src) && !/[\s<>'"\\]/.test(src) && src.indexOf('..') === -1) {
+        return 'https://wsrv.nl/?url=' + encodeURIComponent(src) + '&w=400&h=400&fit=contain';
+      }
+    }
+    if (/^(https?:\/\/|assets\/)/i.test(src) && !/[\s<>'"\\]/.test(src) && src.indexOf('..') === -1) return src;
+    return 'assets/images/product-placeholder.svg';
+  }
+
+  function safeCssUrl(value) {
+    var src = safeMediaUrl(value);
+    if (!src || src.indexOf('product-placeholder') !== -1) return '';
+    if (/[\s<>'"\\)]/.test(src) || src.indexOf('..') !== -1) return '';
+    return src;
+  }
+
+  try {
+    var live = JSON.parse(localStorage.getItem('zander88CatalogLive') || 'null');
+    if (Array.isArray(live) && live.length) window.ZanderCatalog = live;
+  } catch (error) { /* Storage can be unavailable in private browsing. */ }
+
+  var grid = document.querySelector('.product-grid');
+  var catalog = window.ZanderCatalog;
+  if (!grid || !Array.isArray(catalog) || !catalog.length) return;
+
+  var fragment = document.createDocumentFragment();
+  catalog.forEach(function (product) {
+    var article = document.createElement('article');
+    article.className = 'product-card';
+    article.dataset.cat = product.cat;
+    article.dataset.cats = Array.isArray(product.cats) ? product.cats.join('|') : String(product.cat || '');
+    article.dataset.name = product.name.toLowerCase();
+    article.dataset.catalogId = String(product.id);
+
+    var media = document.createElement('div');
+    media.className = 'product-media';
+    var tag = document.createElement('span');
+    tag.className = 'product-tag';
+    tag.textContent = product.stock ? product.cat : 'Out of stock';
+    var image = document.createElement('img');
+    image.src = safeMediaUrl(product.image);
+    image.alt = product.name;
+    image.loading = 'lazy';
+    image.decoding = 'async';
+    image.referrerPolicy = 'no-referrer';
+    var detailHref = 'product.html?id=' + product.id;
+    var mediaLink = document.createElement('a');
+    mediaLink.className = 'product-detail-link';
+    mediaLink.href = detailHref;
+    mediaLink.setAttribute('aria-label', 'View ' + product.name);
+    mediaLink.appendChild(image);
+    media.append(tag, mediaLink);
+
+    var copy = document.createElement('div');
+    copy.className = 'product-copy';
+    var category = document.createElement('div');
+    category.className = 'eyebrow';
+    category.textContent = product.cat;
+    var title = document.createElement('h3');
+    var titleLink = document.createElement('a');
+    titleLink.className = 'product-title-link';
+    titleLink.href = detailHref;
+    titleLink.textContent = product.name;
+    title.appendChild(titleLink);
+    var row = document.createElement('div');
+    row.className = 'product-row';
+    var price = document.createElement('strong');
+    price.textContent = product.price === null ? 'Out of stock' : '$' + product.price.toFixed(2);
+    var button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'add-btn';
+    button.dataset.id = String(product.id);
+    var hasSizes = Array.isArray(product.sizes) && product.sizes.length > 0;
+    if (hasSizes) {
+      button.dataset.sizeLink = detailHref;
+      button.setAttribute('aria-label', 'Choose a size for ' + product.name);
+    }
+    button.textContent = product.stock ? (hasSizes ? 'Choose Size' : 'Add to Cart') : 'Unavailable';
+    button.disabled = !product.stock;
+    row.append(price, button);
+    var cardSizes = null;
+    if (Array.isArray(product.sizes) && product.sizes.length) {
+      cardSizes = document.createElement('div');
+      cardSizes.className = 'card-sizes';
+      cardSizes.setAttribute('aria-label', 'Available sizes: ' + product.sizes.join(', '));
+      var label = document.createElement('span');
+      label.className = 'card-sizes-label';
+      label.textContent = 'Sizes';
+      cardSizes.appendChild(label);
+      /* Keep the row to one line on any card width: show sizes until a short
+         character budget is used, then a "+N" chip. The full list is on the product page. */
+      var shown = [];
+      var budget = 0;
+      for (var si = 0; si < product.sizes.length; si += 1) {
+        var cost = String(product.sizes[si]).length + 2;
+        if (shown.length >= 1 && (shown.length >= 4 || budget + cost > 14)) break;
+        shown.push(product.sizes[si]);
+        budget += cost;
+      }
+      shown.forEach(function (size) {
+        var chip = document.createElement('span');
+        chip.className = 'card-size';
+        chip.textContent = size;
+        chip.title = size;
+        cardSizes.appendChild(chip);
+      });
+      if (product.sizes.length > shown.length) {
+        var extra = document.createElement('span');
+        extra.className = 'card-size card-size-more';
+        extra.textContent = '+' + (product.sizes.length - shown.length);
+        cardSizes.appendChild(extra);
+      }
+    }
+    if (cardSizes) copy.append(category, title, cardSizes, row);
+    else copy.append(category, title, row);
+    article.append(media, copy);
+    fragment.appendChild(article);
+  });
+  grid.replaceChildren(fragment);
+
+  /* Clothing and shoes need a size, so their card button opens the product page
+     instead of adding straight to the cart. Capture phase runs before the cart handlers. */
+  grid.addEventListener('click', function (event) {
+    var button = event.target instanceof Element ? event.target.closest('.add-btn[data-size-link]') : null;
+    if (!button || button.disabled) return;
+    event.preventDefault();
+    event.stopPropagation();
+    window.location.href = button.dataset.sizeLink;
+  }, true);
+
+  /* Retain existing cart quantities while correcting formerly saved product prices. */
+  try {
+    var oldCart = JSON.parse(localStorage.getItem('zander88Cart') || '[]');
+    if (Array.isArray(oldCart)) {
+      var byName = new Map(catalog.map(function (item) {
+        return [item.name.trim().toLowerCase(), item];
+      }));
+      var byId = new Map(catalog.map(function (item) { return [item.id, item]; }));
+      var changed = false;
+      oldCart.forEach(function (item) {
+        var current = byId.get(Number(item.id)) || byName.get(String(item.name || '').trim().toLowerCase());
+        if (!current || !current.stock) return;
+        var sized = item.size && current.sizePrices && current.sizePrices[item.size] != null;
+        var price = sized ? Number(current.sizePrices[item.size]) : current.price;
+        if (item.id === current.id && item.name === current.name && item.price === price && item.img === current.image && item.cat === current.cat) return;
+        item.id = current.id;
+        item.name = current.name;
+        item.price = price;
+        item.img = current.image;
+        item.cat = current.cat;
+        changed = true;
+      });
+      if (changed) localStorage.setItem('zander88Cart', JSON.stringify(oldCart));
+    }
+  } catch (error) { /* Storage can be unavailable in private browsing. */ }
+
+  function hasFilter(name) {
+    var nodes = document.querySelectorAll('[data-filter]');
+    for (var i = 0; i < nodes.length; i += 1) {
+      if (nodes[i].getAttribute('data-filter') === name) return true;
+    }
+    return false;
+  }
+
+  function ensureStoreCategories(list, extraCategories) {
+    var records = [];
+    var seen = {};
+    function add(item) {
+      var rec = null;
+      if (typeof item === 'string') rec = { name: item, image: '' };
+      else if (item && item.name) rec = { name: String(item.name), image: String(item.image || '') };
+      else if (item && item.cat) rec = { name: String(item.cat), image: '' };
+      var name = rec && rec.name ? rec.name.trim() : '';
+      if (!name) return;
+      if (seen[name]) {
+        if (rec.image && !seen[name].image) seen[name].image = rec.image;
+        return;
+      }
+      seen[name] = rec;
+      records.push(rec);
+    }
+    (list || []).forEach(function (item) {
+      if (item && item.cat) add(item.cat);
+    });
+    (extraCategories || []).forEach(add);
+    try {
+      var extra = JSON.parse(localStorage.getItem('zander88Categories') || 'null');
+      if (Array.isArray(extra)) extra.forEach(add);
+    } catch (error) {}
+    var grid = document.querySelector('.cat-grid');
+    var row = document.querySelector('.dept-row');
+    var sampleCat = document.querySelector('.cat');
+    var sampleChip = document.querySelector('.dept-chip:not(.active)');
+    records.forEach(function (rec) {
+      if (hasFilter(rec.name)) return;
+      if (grid && sampleCat) {
+        var button = sampleCat.cloneNode(true);
+        button.classList.remove('selected');
+        button.setAttribute('data-filter', rec.name);
+        var label = button.querySelector('.cat-name');
+        if (label) label.textContent = rec.name;
+        var photo = button.querySelector('.cat-photo');
+        var catImage = safeCssUrl(rec.image);
+        if (photo && catImage) {
+          photo.src = catImage;
+          photo.removeAttribute('srcset');
+        }
+        if (catImage) button.style.setProperty('--cat-image', 'url("' + catImage + '")');
+        grid.appendChild(button);
+      }
+      if (row && sampleChip) {
+        var chip = sampleChip.cloneNode(true);
+        chip.className = 'dept-chip';
+        chip.setAttribute('data-filter', rec.name);
+        chip.textContent = rec.name;
+        row.appendChild(chip);
+      }
+    });
+  }
+
+  ensureStoreCategories(catalog);
+  window.z88VisibleLimit = 24;
+  var more = document.getElementById('catalogMore');
+  if (more) {
+    more.addEventListener('click', function () {
+      window.z88VisibleLimit += 24;
+      var select = document.getElementById('categorySelect');
+      if (select && typeof select.onchange === 'function') select.onchange();
+    });
+  }
+
+  fetch('/api/catalog', { cache: 'no-store' }).then(function (res) {
+    return res.ok ? res.json() : null;
+  }).then(function (data) {
+    if (!data || !Array.isArray(data.products) || !data.products.length) return;
+    try { localStorage.setItem('zander88CatalogLive', JSON.stringify(data.products)); } catch (error) {}
+    if (Array.isArray(data.categories)) {
+      try { localStorage.setItem('zander88Categories', JSON.stringify(data.categories)); } catch (error) {}
+    }
+    window.ZanderCatalog = data.products;
+    ensureStoreCategories(data.products, data.categories);
+  }).catch(function () { /* Keep the bundled catalog if the live API is offline. */ });
+}());
